@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curriculum - Vibe Coding</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                },
+            }
+        }
+    </script>
+
+    <!-- React & ReactDOM & Babel -->
+    <script type="importmap">
+        {
+            "imports": {
+                "react": "https://esm.sh/react@18.2.0",
+                "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+                "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom scrollbar for better look in dark mode */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { ChevronDown, ChevronUp, Sun, Moon } from 'lucide-react';
+
+        const App = () => {
+            const [isDarkMode, setIsDarkMode] = useState(true);
+            
+            // 모든 항목을 기본적으로 펼쳐둘지, 하나씩 펼칠지 결정 (현재는 모두 펼침 상태로 시작)
+            const [expandedItems, setExpandedItems] = useState([0, 1, 2, 3, 4, 5, 6]);
+
+            const toggleTheme = () => {
+                setIsDarkMode(!isDarkMode);
+            };
+
+            const toggleItem = (index) => {
+                if (expandedItems.includes(index)) {
+                    setExpandedItems(expandedItems.filter(i => i !== index));
+                } else {
+                    setExpandedItems([...expandedItems, index]);
+                }
+            };
+
+            const curriculum = [
+                { 
+                    step: "Step 1", 
+                    title: "가입 및 구독하기", 
+                    desc: "Replit 계정 생성부터 요금제 선택, 그리고 가장 중요한 비용 관리 설정까지 알아봅니다.",
+                    details: [
+                        "Replit.com 계정 생성 (모바일 앱 지원)",
+                        "Core 요금제 + 크레딧 구조 이해 (AI 작업량 기반)",
+                        "⚠️ 필수 설정: Usage Alert & Shutdown Limit (요금 폭탄 방지)"
+                    ]
+                },
+                { 
+                    step: "Step 2", 
+                    title: "챗GPT 등으로 PRD(기획서) 작성하기", 
+                    desc: "AI에게 일을 잘 시키기 위한 설계도, PRD를 먼저 작성합니다.",
+                    details: [
+                        "외부 AI(Claude, Gemini 등)를 활용한 초안 작성",
+                        "PRD 핵심 요소: 기능 정의, UI/UX 컨셉, 데이터 구조",
+                        "구체적인 기획이 AI 개발의 시행착오를 줄여줍니다."
+                    ]
+                },
+                { 
+                    step: "Step 3", 
+                    title: "Replit에서 프로젝트 시작하기", 
+                    desc: "Replit의 AI Agent 모드를 켜고 프로젝트를 생성합니다.",
+                    details: [
+                        "Design 모드: UI/UX 중심의 빠른 시각화 및 수정",
+                        "App 모드: 실제 DB, 로그인, 로직이 포함된 완전한 앱",
+                        "목적에 맞는 모드 선택 전략"
+                    ]
+                },
+                { 
+                    step: "Step 4", 
+                    title: "Design 모드로 초기 버전 만들기", 
+                    desc: "준비한 PRD를 입력하여 앱의 뼈대를 만듭니다.",
+                    details: [
+                        "PRD 프롬프트 입력 vs 단순 지시 (PM 레벨 프롬프팅)",
+                        "실시간 프리뷰 확인 및 대화형 디자인 수정",
+                        "구체적인 수정 요청 예시 (톤앤매너, 폰트, 레이아웃 등)"
+                    ]
+                },
+                { 
+                    step: "Step 5", 
+                    title: "App (Build) 모드로 전환하기", 
+                    desc: "디자인된 결과물을 실제 동작하는 어플리케이션으로 변환합니다.",
+                    details: [
+                        "로그인, DB, AI 모델 자동 연동 (별도 API 키 불필요)",
+                        "Logs 탭을 활용한 효과적인 버그 리포팅 및 수정",
+                        "에러 메시지를 AI에게 그대로 전달하여 해결하기"
+                    ]
+                },
+                { 
+                    step: "Step 6", 
+                    title: "앱 배포하기 (Publish)", 
+                    desc: "나만 보는 프로젝트가 아닌, 세상에 공개된 서비스로 만듭니다.",
+                    details: [
+                        "Publish App 버튼으로 즉시 배포",
+                        "커스텀 도메인 연결 및 자동 DNS 설정",
+                        "서비스 URL 생성 및 공유"
+                    ]
+                },
+                { 
+                    step: "Step 7", 
+                    title: "코드 이해하기 (선택사항)", 
+                    desc: "AI가 작성한 코드를 살펴보고 구조를 파악합니다.",
+                    details: [
+                        "Files 패널에서 프로젝트 파일 구조 확인",
+                        "JavaScript/TypeScript + Vite 프레임워크 이해",
+                        "AI에게 특정 파일이나 로직에 대해 역으로 질문하기"
+                    ]
+                }
+            ];
+
+            return (
+                <div className={`min-h-screen flex justify-center p-6 md:p-12 transition-colors duration-300 ${isDarkMode ? 'bg-[#0e0e11] text-gray-100' : 'bg-white text-gray-900'}`}>
+                    
+                    <div className="max-w-3xl w-full relative">
+                        {/* Theme Toggle Button */}
+                        <div className="absolute top-0 right-0 z-20">
+                            <button 
+                                onClick={toggleTheme}
+                                className={`p-2 rounded-full transition-colors ${
+                                    isDarkMode 
+                                    ? 'hover:bg-gray-800 text-gray-400 hover:text-yellow-400' 
+                                    : 'hover:bg-gray-100 text-gray-500 hover:text-orange-500'
+                                }`}
+                                aria-label="Toggle Theme"
+                            >
+                                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                            </button>
+                        </div>
+
+                        <header className="mb-12 text-center md:text-left pr-12">
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-orange-500 mb-2">
+                                Tutorial Session
+                            </h2>
+                            <h1 className="text-3xl font-bold tracking-tight mb-4">Curriculum Detail</h1>
+                            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                Vibe Coding: Full Cycle Prototyping with Replit
+                            </p>
+                        </header>
+                        
+                        <div className="relative pl-4 md:pl-0">
+                            {/* Vertical Line */}
+                            <div className={`absolute left-8 md:left-4 top-4 bottom-4 w-px ${isDarkMode ? 'bg-gray-800' : 'bg-gray-200'}`}></div>
+
+                            <div className="space-y-8">
+                                {curriculum.map((item, index) => {
+                                    const isExpanded = expandedItems.includes(index);
+                                    return (
+                                        <div key={index} className="relative flex items-start gap-6 md:gap-8 group">
+                                            {/* Dot / Number */}
+                                            <button 
+                                                onClick={() => toggleItem(index)}
+                                                className={`relative z-10 flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center border text-[10px] font-bold transition-all duration-300
+                                                ${isDarkMode 
+                                                    ? 'bg-[#0e0e11] border-gray-700 text-gray-300 hover:border-orange-500 hover:text-orange-500' 
+                                                    : 'bg-white border-gray-300 text-gray-500 hover:border-orange-500 hover:text-orange-500'
+                                                } ${isExpanded ? 'border-orange-500 text-orange-500' : ''}`}
+                                            >
+                                                {index + 1}
+                                            </button>
+                                            
+                                            {/* Content */}
+                                            <div className="pt-1 flex-1">
+                                                <div 
+                                                    className="cursor-pointer"
+                                                    onClick={() => toggleItem(index)}
+                                                >
+                                                    <div className="flex items-center justify-between mb-1">
+                                                        <span className={`text-[10px] font-bold uppercase tracking-wider ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                                                            {item.step}
+                                                        </span>
+                                                        <span className={`text-xs opacity-0 group-hover:opacity-100 transition-opacity ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`}>
+                                                            {isExpanded ? <ChevronUp size={14}/> : <ChevronDown size={14}/>}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <h4 className="text-lg font-bold mb-2 group-hover:text-orange-500 transition-colors">
+                                                        {item.title}
+                                                    </h4>
+                                                    <p className={`text-sm leading-relaxed mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                                        {item.desc}
+                                                    </p>
+                                                </div>
+
+                                                {/* Details Section */}
+                                                <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                                                    <ul className={`text-sm space-y-2 pl-4 border-l-2 py-2 my-2 ${isDarkMode ? 'border-gray-800 text-gray-400' : 'border-gray-200 text-gray-600'}`}>
+                                                        {item.details.map((detail, idx) => (
+                                                            <li key={idx} className="leading-relaxed list-none flex items-start">
+                                                                <span className="mr-2 mt-1.5 w-1 h-1 rounded-full bg-orange-500 flex-shrink-0"></span>
+                                                                <span>{detail}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
